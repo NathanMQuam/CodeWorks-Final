@@ -75,5 +75,39 @@ namespace Repositories
          string sql = "DELETE FROM keeps WHERE id = @id LIMIT 1;";
          _db.Execute(sql, new { id });
       }
+
+      internal IEnumerable<Keep> GetByVaultId(int id)
+      {
+         string sql = @"
+      SELECT 
+      keeps.*,
+      vaultKeeps.*,
+      profiles.*
+      FROM keeps
+      JOIN vaultKeeps ON keeps.id = vaultKeeps.keepId
+      JOIN profiles ON keeps.creatorId = profiles.id
+      WHERE vaultKeeps.vaultId = @id;";
+         return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) =>
+         {
+            keep.Creator = profile;
+            return keep;
+         }, new { id }, splitOn: "id");
+      }
+
+      internal IEnumerable<Keep> GetByCreatorId(string id)
+      {
+         string sql = @"
+      SELECT 
+      keep.*,
+      profile.*
+      FROM keeps keep
+      JOIN profiles profile ON keep.creatorId = profile.id
+      WHERE keep.creatorId = @id;";
+         return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) =>
+         {
+            keep.Creator = profile;
+            return keep;
+         }, new { id }, splitOn: "id");
+      }
    }
 }

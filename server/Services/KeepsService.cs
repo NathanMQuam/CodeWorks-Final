@@ -60,7 +60,21 @@ namespace Services
          return "Successsfully Deleted";
       }
 
-      // TODO: Get by Keep Id
-      // TODO: Get by Creator Id
+      internal IEnumerable<Keep> GetByVaultId(int id)
+      {
+         IEnumerable<Keep> keeps = _kRepo.GetByVaultId(id);
+         return keeps.ToList();
+      }
+
+      internal IEnumerable<Keep> GetKeepsByProfileId(string id)
+      {
+         IEnumerable<Keep> keeps = _kRepo.GetByCreatorId(id);
+         return keeps.ToList();
+      }
+
+      internal IEnumerable<Keep> GetKeepsByAccountId(string id)
+      {
+         return _kRepo.GetByCreatorId(id);
+      }
    }
 }

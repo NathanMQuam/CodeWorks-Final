@@ -14,10 +14,12 @@ namespace Controllers
    public class VaultsController : ControllerBase
    {
       private readonly VaultsService _vs;
+      private readonly KeepsService _ks;
 
-      public VaultsController(VaultsService rs)
+      public VaultsController(VaultsService vs, KeepsService ks)
       {
-         _vs = rs;
+         _vs = vs;
+         _ks = ks;
       }
 
       [HttpGet]
@@ -97,6 +99,17 @@ namespace Controllers
          }
       }
 
-      // TODO: Get Keeps by Vault Id
+      [HttpGet("{id}/keeps")]
+      public ActionResult<IEnumerable<Keep>> GetKeepsByVaultId(int id)
+      {
+         try
+         {
+            return Ok(_ks.GetByVaultId(id));
+         }
+         catch (Exception e)
+         {
+            return BadRequest(e.Message);
+         }
+      }
    }
 }

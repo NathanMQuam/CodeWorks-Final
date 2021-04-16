@@ -39,3 +39,20 @@
 --    FOREIGN KEY (keepId)
 --       REFERENCES keeps (id)
 -- );
+-- SELECT * FROM vaults;
+-- SELECT * FROM keeps;
+-- SELECT * FROM vaultKeeps;
+-- INSERT INTO vaultKeeps
+-- (creatorId, vaultId, keepId)
+-- VALUES
+-- ("9fd6652a-512b-4661-9704-7983e12be4f8", 16, 16);
+SELECT
+   keeps.*,
+   vaultKeeps.*,
+   profile.*
+FROM
+   keeps
+   JOIN vaultKeeps ON keeps.id = vaultKeeps.keepId
+   JOIN profiles profile ON keeps.creatorId = profile.id
+WHERE
+   vaultKeeps.vaultId = 16;
