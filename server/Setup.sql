@@ -1,0 +1,6 @@
+-- CREATE TABLE profiles (
+--    id VARCHAR(255) NOT NULL PRIMARY KEY,
+--    name VARCHAR(255),
+--    email VARCHAR(255) NOT NULL UNIQUE,
+--    picture VARCHAR(255)
+-- );
