@@ -36,12 +36,13 @@ namespace Controllers
       }
 
       [HttpGet("{id}")]
-      public ActionResult<Vault> Get(int id)
+      public async Task<ActionResult<Vault>> GetAsync(int id)
       {
          try
          {
+            Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
             Vault data = _vs.Get(id);
-            if (data.IsPrivate)
+            if (data.IsPrivate && data.CreatorId != userInfo.Id)
             {
                return BadRequest();
             }
@@ -105,10 +106,16 @@ namespace Controllers
       }
 
       [HttpGet("{id}/keeps")]
-      public ActionResult<IEnumerable<VaultKeepViewModel>> GetKeepsByVaultId(int id)
+      public async Task<ActionResult<IEnumerable<VaultKeepViewModel>>> GetKeepsByVaultIdAsync(int id)
       {
          try
          {
+            Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+            Vault v = _vs.Get(id);
+            if (v.IsPrivate && v.CreatorId != userInfo.Id)
+            {
+               return BadRequest();
+            }
             return Ok(_ks.GetByVaultId(id));
          }
          catch (Exception e)
