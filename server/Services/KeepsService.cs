@@ -60,9 +60,9 @@ namespace Services
          return "Successsfully Deleted";
       }
 
-      internal IEnumerable<Keep> GetByVaultId(int id)
+      internal IEnumerable<VaultKeepViewModel> GetByVaultId(int id)
       {
-         IEnumerable<Keep> keeps = _kRepo.GetByVaultId(id);
+         IEnumerable<VaultKeepViewModel> keeps = _kRepo.GetByVaultId(id);
          return keeps.ToList();
       }
 

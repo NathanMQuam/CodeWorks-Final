@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 using Dapper;
 using Models;
 
@@ -26,7 +27,22 @@ namespace Repositories
 
       internal void Remove(int id)
       {
-         throw new NotImplementedException();
+         string sql = @"DELETE FROM vaultkeeps WHERE id = @id LIMIT 1;";
+         _db.Execute(sql, new { id });
+      }
+
+      internal VaultKeep Get(int id)
+      {
+         string sql = @"SELECT vaultKeeps.*,
+                        profile.*
+                        FROM vaultkeeps
+                        JOIN profiles profile ON vaultKeeps.creatorId = profile.id
+                        WHERE vaultKeeps.id = @id;";
+         return _db.Query<VaultKeep, Profile, VaultKeep>(sql, (vaultKeep, profile) =>
+         {
+            vaultKeep.Creator = profile;
+            return vaultKeep;
+         }, new { id }, splitOn: "id").FirstOrDefault();
       }
    }
 }

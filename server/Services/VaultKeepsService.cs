@@ -19,7 +19,7 @@ namespace Services
          return newVaultKeep;
       }
 
-      internal object Delete(int id, string userId)
+      internal void Delete(int id, string userId)
       {
          VaultKeep original = Get(id);
          if (original.CreatorId != userId)
@@ -27,12 +27,12 @@ namespace Services
             throw new Exception("You cannot delete something you did not create");
          }
          _vkRepo.Remove(id);
-         return "Successsfully Deleted";
       }
 
       private VaultKeep Get(int id)
       {
-         throw new NotImplementedException();
+         VaultKeep vk = _vkRepo.Get(id);
+         return vk;
       }
    }
 }
