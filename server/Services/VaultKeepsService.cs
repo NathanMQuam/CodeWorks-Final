@@ -7,15 +7,20 @@ namespace Services
    public class VaultKeepsService
    {
       private readonly VaultKeepsRepository _vkRepo;
+      private readonly KeepsRepository _kRepo;
 
-      public VaultKeepsService(VaultKeepsRepository vkRepo)
+      public VaultKeepsService(VaultKeepsRepository vkRepo, KeepsRepository kr)
       {
          _vkRepo = vkRepo;
+         _kRepo = kr;
       }
 
       internal VaultKeep CreateVaultKeep(VaultKeep newVaultKeep)
       {
          newVaultKeep.Id = _vkRepo.Create(newVaultKeep);
+         Keep vKeep = _kRepo.Get(newVaultKeep.KeepId);
+         vKeep.Keeps++;
+         _kRepo.Edit(vKeep);
          return newVaultKeep;
       }
 

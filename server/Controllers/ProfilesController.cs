@@ -1,6 +1,8 @@
 using Models;
 using Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Controllers
 {
@@ -10,7 +12,7 @@ namespace Controllers
    {
       private readonly ProfilesService _pservice;
 
-      public ProfilesController(ProfilesService pservice /*, BlogsService bs*/)
+      public ProfilesController(ProfilesService pservice, KeepsService ks, VaultsService vs)
       {
          _pservice = pservice;
       }
@@ -22,7 +24,33 @@ namespace Controllers
          {
             return Ok(_pservice.GetProfileById(id));
          }
-         catch (System.Exception err)
+         catch (Exception err)
+         {
+            return BadRequest(err.Message);
+         }
+      }
+
+      [HttpGet("{id}/keeps")]
+      public ActionResult<IEnumerable<Keep>> GetUsersKeeps(string id)
+      {
+         try
+         {
+            return Ok(_pservice.GetKeepsByProfileId(id));
+         }
+         catch (Exception err)
+         {
+            return BadRequest(err.Message);
+         }
+      }
+
+      [HttpGet("{id}/vaults")]
+      public ActionResult<IEnumerable<Vault>> GetUsersVaults(string id)
+      {
+         try
+         {
+            return Ok(_pservice.GetVaultsByProfileId(id));
+         }
+         catch (Exception err)
          {
             return BadRequest(err.Message);
          }

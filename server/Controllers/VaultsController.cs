@@ -36,11 +36,16 @@ namespace Controllers
       }
 
       [HttpGet("{id}")]
-      public ActionResult<IEnumerable<Vault>> Get(int id)
+      public ActionResult<Vault> Get(int id)
       {
          try
          {
-            return Ok(_vs.Get(id));
+            Vault data = _vs.Get(id);
+            if (data.IsPrivate)
+            {
+               return BadRequest();
+            }
+            return Ok(data);
          }
          catch (Exception e)
          {

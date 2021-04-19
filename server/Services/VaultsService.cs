@@ -17,7 +17,7 @@ namespace Services
       public IEnumerable<Vault> GetAll()
       {
          IEnumerable<Vault> vaults = _repo.GetAll();
-         return vaults;
+         return vaults.ToList().FindAll(v => !v.IsPrivate);
       }
 
       internal Vault Get(int id)
