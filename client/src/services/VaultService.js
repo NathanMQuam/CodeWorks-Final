@@ -1,9 +1,14 @@
+import { AppState } from '../AppState.js'
+import { Keep } from '../models/KeepModel.js'
+import { Vault } from '../models/VaultModel.js'
 import { logger } from '../utils/Logger'
+import { api } from './AxiosService.js'
 
 class VaultService {
   async GetAllVaults() {
     try {
-      // TODO
+      const res = await api.get('api/vaults')
+      AppState.vaults = res.data.map(v => new Vault(v))
     } catch (err) {
       logger.error(err)
     }
@@ -11,15 +16,17 @@ class VaultService {
 
   async GetVaultById(id) {
     try {
-      // TODO
+      const res = await api.get('api/vaults/' + id)
+      AppState.activeVault = new Vault(res.data)
     } catch (err) {
       logger.error(err)
     }
   }
 
-  async CreateVault() {
+  async CreateVault(newVault) {
     try {
-      // TODO
+      const res = await api.post('api/vaults', newVault)
+      AppState.activeVault = new Vault(res.data)
     } catch (err) {
       logger.error(err)
     }
@@ -27,7 +34,8 @@ class VaultService {
 
   async EditVault(UpdatedVault) {
     try {
-      // TODO
+      const res = await api.put('api/vaults', UpdatedVault)
+      AppState.activeVault = new Vault(res.data)
     } catch (err) {
       logger.error(err)
     }
@@ -35,7 +43,7 @@ class VaultService {
 
   async DeleteVault(id) {
     try {
-      // TODO
+      await api.delete('api/vaults/' + id)
     } catch (err) {
       logger.error(err)
     }
@@ -43,7 +51,9 @@ class VaultService {
 
   async GetKeepsByVaultId(id) {
     try {
-      // TODO
+      const res = await api.get(`api/vaults/${id}/keeps`)
+      AppState.keeps = res.data.map(k => new Keep(k))
+      logger.log(AppState.keeps)
     } catch (err) {
       logger.error(err)
     }
