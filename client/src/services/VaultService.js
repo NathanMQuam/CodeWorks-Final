@@ -59,6 +59,16 @@ class VaultService {
       logger.error(err)
     }
   }
+
+  async GetAccountVaults() {
+    try {
+      const res = await api.get('account/vaults')
+      logger.log('My vaults:', res.data)
+      AppState.vaults = res.data.map(v => new Vault(v))
+    } catch (err) {
+      logger.error(err)
+    }
+  }
 }
 
 export const vaultService = new VaultService()

@@ -1,36 +1,23 @@
 <template>
   <div class="ProfilePage container">
-    <div class="row">
-      <div class="col">
-        <div class="text-center p-1">
-          <img class="rounded" :src="state.activeProfile.picture" :alt="state.activeProfile.email" />
-          <p>{{ state.activeProfile.email }}</p>
+    <div class="row py-4">
+      <div class="col-2">
+        <img class="rounded img-fluid w-100" :src="state.account.picture" />
+      </div>
+      <div class="col-9">
+        <div>
+          <h1>{{ state.account.name }}</h1>
+        </div>
+        <div>
+          <h4>Vaults: {{ state.numVaults }}</h4>
+          <h4>Keeps: {{ state.numKeeps }}</h4>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12">
-        <h4>Vaults</h4>
-      </div>
-      <div class="col-3" v-for="vault in state.vaults" :key="vault.id">
-        <div class="card p-2 my-1 shadow">
-          <p>{{ vault.name }}</p>
-          <p>{{ vault.description }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <h4>Keeps</h4>
-      </div>
-      <div class="col-3" v-for="keep in state.keeps" :key="keep.id">
-        <div class="card shadow my-1">
-          <p>{{ keep.name }}</p>
-          <p>{{ keep.description }}</p>
-          <img class="img-fluid" :src="keep.image">
-        </div>
-      </div>
-    </div>
+    <h3>Vaults</h3>
+    <VaultsList />
+    <h3>Keeps</h3>
+    <KeepsList />
   </div>
 </template>
 
@@ -44,9 +31,11 @@ export default {
   setup() {
     const route = useRoute()
     const state = reactive({
-      activeProfile: computed(() => AppState.activeProfile),
+      account: computed(() => AppState.activeProfile),
       keeps: computed(() => AppState.keeps),
-      vaults: computed(() => AppState.vaults)
+      vaults: computed(() => AppState.vaults),
+      numKeeps: computed(() => AppState.keeps.length),
+      numVaults: computed(() => AppState.vaults.length)
     })
     onMounted(() => {
       const id = route.params.profileId

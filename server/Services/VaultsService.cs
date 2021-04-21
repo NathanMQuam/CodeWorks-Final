@@ -54,5 +54,10 @@ namespace Services
          _repo.Remove(id);
          return "successfully deleted";
       }
+
+      internal IEnumerable<Vault> GetVaultsByAccountId(string id)
+      {
+         return _repo.GetByAccountId(id);
+      }
    }
 }

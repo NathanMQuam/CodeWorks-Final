@@ -90,6 +90,32 @@ namespace Repositories
          _db.Execute(sql, new { id });
       }
 
+      internal IEnumerable<Keep> GetByAccount(string id)
+      {
+         string sql = @"
+            SELECT 
+            keeps.id,
+            keeps.creatorId,
+            keeps.name,
+            keeps.description,
+            keeps.image AS img,
+            keeps.views,
+            keeps.shares,
+            keeps.keeps,
+            profiles.id,
+            profiles.name AS creatorName,
+            profiles.email,
+            profiles.picture
+            FROM keeps
+            JOIN profiles ON keeps.creatorId = profiles.id
+            WHERE keeps.creatorId = @id;";
+         return _db.Query<Keep, Profile, Keep>(sql, (Keep, Profile) =>
+         {
+            Keep.Creator = Profile;
+            return Keep;
+         }, new { id }, splitOn: "id");
+      }
+
       internal IEnumerable<VaultKeepViewModel> GetByVaultId(int id)
       {
          string sql = @"

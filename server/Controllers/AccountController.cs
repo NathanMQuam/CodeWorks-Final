@@ -18,10 +18,14 @@ namespace Controllers
    public class AccountController : ControllerBase
    {
       private readonly ProfilesService _pservice;
+      private readonly KeepsService _ks;
+      private readonly VaultsService _vs;
 
-      public AccountController(ProfilesService pservice)
+      public AccountController(ProfilesService pservice, KeepsService ks, VaultsService vs)
       {
          _pservice = pservice;
+         _ks = ks;
+         _vs = vs;
       }
 
       [HttpGet]
@@ -35,6 +39,34 @@ namespace Controllers
             //MAKE SURE TO BRING IN codeworks.auth0provider
             Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
             return Ok(_pservice.GetOrCreateProfile(userInfo));
+         }
+         catch (Exception e)
+         {
+            return BadRequest(e.Message);
+         }
+      }
+
+      [HttpGet("keeps")]
+      public async Task<ActionResult<IEnumerable<Keep>>> GetKeepsAsync()
+      {
+         try
+         {
+            Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+            return Ok(_ks.GetKeepsByAccountId(userInfo.Id));
+         }
+         catch (Exception e)
+         {
+            return BadRequest(e.Message);
+         }
+      }
+
+      [HttpGet("vaults")]
+      public async Task<ActionResult<IEnumerable<Vault>>> GetVaultsAsync()
+      {
+         try
+         {
+            Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+            return Ok(_vs.GetVaultsByAccountId(userInfo.Id));
          }
          catch (Exception e)
          {

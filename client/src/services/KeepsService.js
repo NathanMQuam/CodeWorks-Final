@@ -24,6 +24,24 @@ class KeepsService {
     }
   }
 
+  async GetAccountKeeps() {
+    try {
+      const res = await api.get('account/keeps')
+      AppState.keeps = res.data.map(k => new Keep(k))
+    } catch (err) {
+      logger.error(err)
+    }
+  }
+
+  async GetUsersKeeps(id) {
+    try {
+      const res = await api.get(`api/profiles/${id}/keeps`)
+      AppState.keeps = res.data.map(k => new Keep(k))
+    } catch (err) {
+      logger.error(err)
+    }
+  }
+
   async CreateKeep(newKeep) {
     try {
       const res = await api.post('api/keeps', new Keep(newKeep))

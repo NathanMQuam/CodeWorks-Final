@@ -79,7 +79,7 @@ namespace Services
 
       internal IEnumerable<Keep> GetKeepsByAccountId(string id)
       {
-         return _kRepo.GetByCreatorId(id);
+         return _kRepo.GetByAccount(id);
       }
    }
 }
