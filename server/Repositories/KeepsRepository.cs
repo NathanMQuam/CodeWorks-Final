@@ -80,12 +80,28 @@ namespace Repositories
       {
          string sql = @"
       SELECT 
-      keeps.*,
-      vaultkeeps.id AS vaultKeepId
+      keeps.id,
+      keeps.creatorId,
+      keeps.name,
+      keeps.description,
+      keeps.image AS img,
+      keeps.views,
+      keeps.shares,
+      keeps.keeps,
+      vaultkeeps.id AS vaultKeepId,
+      profiles.id,
+      profiles.name AS creatorName,
+      profiles.email,
+      profiles.picture
       FROM vaultKeeps
       JOIN keeps ON keeps.id = vaultKeeps.keepId
+      JOIN profiles ON keeps.creatorId = profiles.id
       WHERE vaultId = @id;";
-         return _db.Query<VaultKeepViewModel>(sql, new { id });
+         return _db.Query<VaultKeepViewModel, Profile, VaultKeepViewModel>(sql, (VaultKeepViewModel, Profile) =>
+         {
+            VaultKeepViewModel.Creator = Profile;
+            return VaultKeepViewModel;
+         }, new { id }, splitOn: "id");
       }
 
       internal IEnumerable<Keep> GetByCreatorId(string id)
