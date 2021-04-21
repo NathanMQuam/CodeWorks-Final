@@ -1,6 +1,8 @@
 <template>
   <div class="VaultComponent">
-    vault
+    <router-link :to="{name: 'Vault', params: {vaultId: vault.id}}">
+      vault
+    </router-link>
   </div>
 </template>
 

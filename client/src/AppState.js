@@ -7,7 +7,7 @@ import { Vault } from './models/VaultModel.js'
 export const AppState = reactive({
   user: {},
   account: {},
-  keeps: [new Keep({ name: 'Keep 1', image: 'http://placehold.it/200x200' }), new Keep({ name: 'keep two', image: 'http://placehold.it/350x200' })],
+  keeps: [],
   vaults: [],
   activeKeep: new Keep(),
   activeVault: new Vault(),
