@@ -17,10 +17,16 @@ namespace Repositories
 
       internal int Create(VaultKeep newVaultKeep)
       {
-         string sql = @"INSERT INTO vaultkeeps
+         string sql = @"
+            UPDATE keeps
+            SET keeps = keeps + 1
+            WHERE id = @KeepId;
+
+            INSERT INTO vaultkeeps
             (creatorId, vaultId, keepId)
             VALUES
             (@CreatorId, @VaultId, @KeepId);
+
             SELECT LAST_INSERT_ID()";
          return _db.ExecuteScalar<int>(sql, newVaultKeep);
       }
