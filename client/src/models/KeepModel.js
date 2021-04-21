@@ -6,7 +6,7 @@ export class Keep {
     this.creatorId = data.creatorId || ''
     this.name = data.name || ''
     this.description = data.description || ''
-    this.image = data.image || data.Img || ''
+    this.image = data.image || data.Img || data.img || ''
     this.keeps = data.keeps || 0
     this.views = data.views || 0
     this.shares = data.shares || 0

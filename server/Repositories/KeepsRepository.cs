@@ -31,10 +31,17 @@ namespace Repositories
       {
          string sql = @"
             SELECT 
-            keep.*,
+            keeps.id,
+            keeps.creatorId,
+            keeps.name,
+            keeps.description,
+            keeps.image AS img,
+            keeps.views,
+            keeps.shares,
+            keeps.keeps,
             profile.*
-            FROM keeps keep
-            JOIN profiles profile ON keep.creatorId = profile.id;";
+            FROM keeps
+            JOIN profiles profile ON keeps.creatorId = profile.id;";
          return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) =>
          {
             keep.Creator = profile;
@@ -46,11 +53,18 @@ namespace Repositories
       {
          string sql = @"
             SELECT 
-            keep.*,
+            keeps.id,
+            keeps.creatorId,
+            keeps.name,
+            keeps.description,
+            keeps.image AS img,
+            keeps.views,
+            keeps.shares,
+            keeps.keeps,
             profile.*
-            FROM keeps keep
-            JOIN profiles profile ON keep.creatorId = profile.id
-            WHERE keep.id = @id;";
+            FROM keeps
+            JOIN profiles profile ON keeps.creatorId = profile.id
+            WHERE keeps.id = @id;";
          return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) =>
          {
             keep.Creator = profile;
@@ -79,24 +93,24 @@ namespace Repositories
       internal IEnumerable<VaultKeepViewModel> GetByVaultId(int id)
       {
          string sql = @"
-      SELECT 
-      keeps.id,
-      keeps.creatorId,
-      keeps.name,
-      keeps.description,
-      keeps.image AS img,
-      keeps.views,
-      keeps.shares,
-      keeps.keeps,
-      vaultkeeps.id AS vaultKeepId,
-      profiles.id,
-      profiles.name AS creatorName,
-      profiles.email,
-      profiles.picture
-      FROM vaultKeeps
-      JOIN keeps ON keeps.id = vaultKeeps.keepId
-      JOIN profiles ON keeps.creatorId = profiles.id
-      WHERE vaultId = @id;";
+            SELECT 
+            keeps.id,
+            keeps.creatorId,
+            keeps.name,
+            keeps.description,
+            keeps.image AS img,
+            keeps.views,
+            keeps.shares,
+            keeps.keeps,
+            vaultkeeps.id AS vaultKeepId,
+            profiles.id,
+            profiles.name AS creatorName,
+            profiles.email,
+            profiles.picture
+            FROM vaultKeeps
+            JOIN keeps ON keeps.id = vaultKeeps.keepId
+            JOIN profiles ON keeps.creatorId = profiles.id
+            WHERE vaultId = @id;";
          return _db.Query<VaultKeepViewModel, Profile, VaultKeepViewModel>(sql, (VaultKeepViewModel, Profile) =>
          {
             VaultKeepViewModel.Creator = Profile;
@@ -107,12 +121,19 @@ namespace Repositories
       internal IEnumerable<Keep> GetByCreatorId(string id)
       {
          string sql = @"
-      SELECT 
-      keep.*,
-      profile.*
-      FROM keeps keep
-      JOIN profiles profile ON keep.creatorId = profile.id
-      WHERE keep.creatorId = @id;";
+            SELECT 
+            keeps.id,
+            keeps.creatorId,
+            keeps.name,
+            keeps.description,
+            keeps.image AS img,
+            keeps.views,
+            keeps.shares,
+            keeps.keeps,
+            profile.*
+            FROM keeps
+            JOIN profiles profile ON keeps.creatorId = profile.id
+            WHERE keeps.creatorId = @id;";
          return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) =>
          {
             keep.Creator = profile;
