@@ -1,6 +1,12 @@
 <template>
-  <div class="KeepComponent m-2 w-100 card bg-dark text-white shadow cursor-pointer" @click="GetKeep()" data-target="#keepDetailsModal" data-toggle="modal">
-    <img :src="keep.image" class="card-img" :alt="keep.description">
+  <div class="KeepComponent m-2 w-100 card bg-dark text-white shadow cursor-pointer">
+    <img :src="keep.image"
+         class="card-img"
+         :alt="keep.description"
+         @click="GetKeep()"
+         data-target="#keepDetailsModal"
+         data-toggle="modal"
+    >
     <div class="card-img-overlay img-gradient mt-auto p-0">
     </div>
     <div class="card-img-overlay mt-auto p-1 d-flex justify-content-between">

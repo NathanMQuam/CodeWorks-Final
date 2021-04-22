@@ -1,8 +1,6 @@
 <template>
   <div class="VaultsList row">
-    <div class="card-columns">
-      <VaultComponent v-for="vault in state.vaults" :key="vault.id" :vault="vault" />
-    </div>
+    <VaultComponent v-for="vault in state.vaults" :key="vault.id" :vault="vault" />
   </div>
 </template>
 

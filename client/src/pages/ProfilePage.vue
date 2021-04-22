@@ -24,12 +24,13 @@
 <script>
 import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState.js'
-import { useRoute } from 'vue-router'
+import { useRoute /*, useRouter */ } from 'vue-router'
 import { profileService } from '../services/ProfileService'
 export default {
   name: 'ProfilePage',
   setup() {
     const route = useRoute()
+    // const router = useRouter()
     const state = reactive({
       account: computed(() => AppState.activeProfile),
       keeps: computed(() => AppState.keeps),
@@ -39,6 +40,10 @@ export default {
     })
     onMounted(() => {
       const id = route.params.profileId
+      // TODO: Go to account page instead if the profile is your account
+      // if (id === state.account.id) {
+      // router.push('Account')
+      // }
       profileService.GetProfileById(id)
       profileService.GetUsersKeeps(id)
       profileService.GetUsersVaults(id)

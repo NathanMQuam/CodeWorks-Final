@@ -1,9 +1,11 @@
 <template>
-  <div class="VaultComponent">
-    <router-link :to="{name: 'Vault', params: {vaultId: vault.id}}">
-      vault
-    </router-link>
-  </div>
+  <router-link class="VaultComponent col-2" :to="{name: 'Vault', params: {vaultId: vault.id}}">
+    <div class="m-2 p-2 card w-100 bg-dark text-white shadow cursor-pointer">
+      <div>
+        {{ vault.name }}
+      </div>
+    </div>
+  </router-link>
 </template>
 
 <script>
