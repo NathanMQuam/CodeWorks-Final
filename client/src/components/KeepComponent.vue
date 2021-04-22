@@ -1,5 +1,5 @@
 <template>
-  <div class="KeepComponent m-2 w-100 card bg-dark text-white shadow cursor-pointer" data-target="#keepDetailsModal" data-toggle="modal">
+  <div class="KeepComponent m-2 w-100 card bg-dark text-white shadow cursor-pointer" @click="GetKeep()" data-target="#keepDetailsModal" data-toggle="modal">
     <img :src="keep.image" class="card-img" :alt="keep.description">
     <div class="card-img-overlay img-gradient mt-auto p-0">
     </div>
@@ -16,10 +16,19 @@
 
 <script>
 import { Keep } from '../models/KeepModel.js'
+import { AppState } from '../AppState.js'
+import { keepsService } from '../services/KeepsService.js'
 export default {
   name: 'KeepComponent',
-  setup() {
-    return { }
+  setup(props) {
+    function GetKeep() {
+      // console.log('Got keep:', props.keep.id)
+      keepsService.GetKeepById(props.keep.id)
+    }
+    return {
+      AppState,
+      GetKeep
+    }
   },
   props: { keep: { type: Keep, default: () => new Keep() } },
   components: {}
@@ -27,21 +36,17 @@ export default {
 </script>
 
 <style lang="scss">
-.cursor-pointer {
-  cursor: pointer;
-}
-
 .keepCard {
   overflow: hidden;
 }
 
-.keepCard img, .profile-link, .img-gradient {
-  transition: transform .2s; /* Animation */
-}
+// .keepCard img, .profile-link, .img-gradient {
+//   transition: transform .2s; /* Animation */
+// }
 
-.keepCard:hover .card-img, .profile-link:hover {
-  transform: scale(1.1);
-}
+// .keepCard:hover .card-img, .profile-link:hover {
+//   transform: scale(1.1);
+// }
 
 .card-img-overlay {
   height: 3rem;
@@ -54,9 +59,9 @@ export default {
   transition: height .2s;
 }
 
-.keepCard:hover .img-gradient {
-  height: 4rem;
-}
+// .keepCard:hover .img-gradient {
+//   height: 4rem;
+// }
 
 .profile-img {
   border-radius: 100%;

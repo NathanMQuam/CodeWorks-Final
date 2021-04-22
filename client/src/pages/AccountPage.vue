@@ -14,10 +14,24 @@
         </div>
       </div>
     </div>
-    <h3>Vaults</h3>
+    <div class="row">
+      <div class="col">
+        <div class="d-flex">
+          <h3>Vaults</h3>
+          <CreateVaultComponent />
+        </div>
+      </div>
+    </div>
     <VaultsList />
-    <h3>Keeps</h3>
-    <KeepsList />
+    <div class="row">
+      <div class="col">
+        <div class="d-flex">
+          <h3>Keeps</h3>
+          <CreateKeepComponent />
+        </div>
+        <KeepsList />
+      </div>
+    </div>
   </div>
 </template>
 

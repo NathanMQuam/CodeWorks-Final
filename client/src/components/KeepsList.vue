@@ -13,26 +13,65 @@
        aria-labelledby="keepDetailsModalTitle"
        aria-hidden="true"
   >
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="keepDetailsModalTitle">
-            Modal title
+            {{ AppState.activeKeep.name }}
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          Keep details here
+          <div class="d-flex h-100">
+            <div class="w-50 h-100">
+              <img :src="AppState.activeKeep.image" class="mw-100 w-100">
+            </div>
+            <div class="w-50 container">
+              <div class="row">
+                <div class="col-6 offset-3 d-flex justify-content-around">
+                  <div>
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                    {{ AppState.activeKeep.views }}
+                  </div>
+                  <div>
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    {{ AppState.activeKeep.keeps }}
+                  </div>
+                  <div>
+                    <i class="fa fa-share" aria-hidden="true"></i>
+                    {{ AppState.activeKeep.shares }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <h2>{{ AppState.activeKeep.name }}</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  {{ AppState.activeKeep.description }}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
           <button type="button" class="btn btn-primary">
-            Save changes
+            Save to Keep
           </button>
+          <button type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                  @click="deleteKeep()"
+                  v-if="AppState.account.id === AppState.activeKeep.creatorId"
+          >
+            Delete
+          </button>
+          <div>{{ AppState.activeKeep.creator.name }}</div>
         </div>
       </div>
     </div>
@@ -42,14 +81,33 @@
 <script>
 import { computed, reactive } from 'vue'
 import { AppState } from '../AppState.js'
+import { keepsService } from '../services/KeepsService.js'
+import { Keep } from '../models/KeepModel.js'
+import { useRoute } from 'vue-router'
 export default {
   name: 'KeepsList',
   setup() {
+    const route = useRoute()
     const state = reactive({
       keeps: computed(() => AppState.keeps)
     })
+    async function deleteKeep() {
+      console.log('Attempting to delete keep:', AppState.activeKeep.id)
+      if (window.confirm('Are you sure you would like to delete this keep? \nWarning: This is permanent!')) {
+        await keepsService.DeleteKeep(AppState.activeKeep.id)
+        AppState.activeKeep = new Keep()
+        console.log(route.name)
+        if (route.name === 'Account') {
+          keepsService.GetAccountKeeps()
+        } else {
+          keepsService.GetAllKeeps()
+        }
+      }
+    }
     return {
-      state
+      state,
+      AppState,
+      deleteKeep
     }
   },
   components: {}

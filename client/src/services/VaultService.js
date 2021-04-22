@@ -25,7 +25,7 @@ class VaultService {
 
   async CreateVault(newVault) {
     try {
-      const res = await api.post('api/vaults', newVault)
+      const res = await api.post('api/vaults', new Vault(newVault))
       AppState.activeVault = new Vault(res.data)
     } catch (err) {
       logger.error(err)

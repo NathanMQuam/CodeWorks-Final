@@ -33,11 +33,14 @@
 --    vaultId INT NOT NULL,
 --    keepId INT NOT NULL,
 --    FOREIGN KEY (creatorId)
---       REFERENCES profiles (id),
+--       REFERENCES profiles (id)
+--        ON DELETE CASCADE,
 --    FOREIGN KEY (vaultId)
---       REFERENCES vaults (id),
+--       REFERENCES vaults (id)
+--       ON DELETE CASCADE,
 --    FOREIGN KEY (keepId)
 --       REFERENCES keeps (id)
+--       ON DELETE CASCADE
 -- );
 -- SELECT * FROM vaults;
 -- SELECT * FROM keeps;
