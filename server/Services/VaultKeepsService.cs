@@ -34,7 +34,7 @@ namespace Services
          _vkRepo.Remove(id);
       }
 
-      private VaultKeep Get(int id)
+      internal VaultKeep Get(int id)
       {
          VaultKeep vk = _vkRepo.Get(id);
          return vk;

@@ -55,35 +55,40 @@
                   {{ AppState.activeKeep.description }}
                 </div>
               </div>
-              <div class="row mt-auto">
-                <div class="col">
-                  <div v-if="!state.saveMode" class="d-flex">
-                    <button type="button" class="btn btn-primary" @click="toggleSaveMode(true)">
-                      Save to Vault
-                    </button>
-                    <button type="button"
-                            class="btn btn-secondary"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                            @click="deleteKeep()"
-                            v-if="AppState.account.id === AppState.activeKeep.creatorId"
-                    >
-                      Delete
-                    </button>
-                    {{ AppState.activeKeep.creator.name }}
-                  </div>
-                  <div class="row mh-100" v-else>
-                    <div class="col">
-                      <button class="btn btn-secondary" @click="toggleSaveMode(false)">
-                        Cancel
-                      </button>
-                      <SaveToVaultComponent :keep="AppState.activeKeep.id" />
-                    </div>
-                    <!-- <VaultsList class="w-100" :dropdownlist="true" /> -->
-                  </div>
-                </div>
-              </div>
             </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex">
+          <div class="w-50"></div>
+          <div v-if="!state.saveMode" class="w-50 d-flex justify-content-between">
+            <button type="button" class="btn btn-primary" @click="toggleSaveMode(true)">
+              Save to Vault
+            </button>
+            <div
+              class="p-3"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="deleteKeep()"
+              v-if="AppState.account.id === AppState.activeKeep.creatorId"
+            >
+              <i class="fa fa-lg fa-trash-o" aria-hidden="true"></i>
+            </div>
+            <div v-if="state.activeUser.id" class="mh-100">
+              <router-link class="profile-link text-right w-25 h-100 mh-100 d-flex" :to="{name: 'Profile', params: {profileId: state.activeUser.id}}">
+                <img :src="state.activeKeep.creator.picture" :alt="state.activeKeep.creator.name" class="rounded my-auto profile-picture shadow">
+                <div class="my-auto text-dark pl-2">
+                  {{ state.activeUser.name }}
+                </div>
+              </router-link>
+            </div>
+          </div>
+          <div class="mh-100 mt-auto w-50 d-flex" v-else>
+            <div class="ml-auto">
+              <button class="btn btn-secondary" @click="toggleSaveMode(false)">
+                Cancel
+              </button>
+            </div>
+            <SaveToVaultComponent :keep="AppState.activeKeep.id" />
           </div>
         </div>
       </div>
@@ -92,18 +97,24 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState.js'
 import { keepsService } from '../services/KeepsService.js'
 import { Keep } from '../models/KeepModel.js'
 import { useRoute } from 'vue-router'
+import { Profile } from '../models/ProfileModel.js'
 export default {
   name: 'KeepsList',
   setup() {
     const route = useRoute()
     const state = reactive({
       keeps: computed(() => AppState.keeps),
+      activeUser: computed(() => new Profile(AppState.activeKeep.creator)),
+      activeKeep: computed(() => new Keep(AppState.activeKeep)),
       saveMode: false
+    })
+    onMounted(() => {
+      AppState.activeKeep = new Keep()
     })
     async function deleteKeep() {
       console.log('Attempting to delete keep:', AppState.activeKeep.id)
@@ -134,5 +145,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.profile-picture {
+  width: 3rem;
+  height: 3rem;
+}
 </style>

@@ -58,7 +58,7 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
               Cancel
             </button>
-            <button type="submit" class="btn btn-primary" data-dismiss="modal">
+            <button type="submit" class="btn btn-primary">
               Publish
             </button>
           </div>
@@ -81,7 +81,7 @@ export default {
     async function createKeep() {
       console.log('Attempting to create keep:', state.newKeep)
       await keepsService.CreateKeep(state.newKeep)
-      state.newKeep = new Keep()
+      state.newKeep = computed(() => new Keep())
       keepsService.GetAccountKeeps()
     }
     return { state, createKeep }

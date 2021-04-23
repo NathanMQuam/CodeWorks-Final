@@ -37,9 +37,11 @@ export default {
     })
     function deleteVault() {
       console.log('Attempting to delete vault:', state.activeVault.id)
-      vaultService.DeleteVault(state.activeVault.id)
-      AppState.activeVault = new Vault()
-      router.back()
+      if (window.confirm('Are you sure you would like to delete this vault?\nWarning: This is permanent!')) {
+        vaultService.DeleteVault(state.activeVault.id)
+        AppState.activeVault = new Vault()
+        router.back()
+      }
     }
     return {
       state,
